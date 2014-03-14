@@ -178,4 +178,14 @@ abstract class Element
     {
         return $this->attrAfterElement;
     }
+
+    /**
+     * Return a string representation of this form
+     * this is an alias of render()
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->render();
+    }
 } 
