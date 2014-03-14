@@ -15,7 +15,7 @@ class FormTest extends PHPUnit_Framework_TestCase
     {
         $form = new Form();
         $output = $form->render();
-        $this->assertEquals('<form></form>', $output);
+        $this->assertEquals('<form action="" method="post"></form>', $output);
     }
 
     /**
@@ -26,7 +26,7 @@ class FormTest extends PHPUnit_Framework_TestCase
     {
         $form = new Form();
         $form->setAttribute('id', 'on_days_like_these');
-        $this->assertEquals('<form id="on_days_like_these"></form>', $form->render());
+        $this->assertContains('id="on_days_like_these"', $form->render());
     }
 
     /**
@@ -43,6 +43,6 @@ class FormTest extends PHPUnit_Framework_TestCase
         $formInner->setAttribute('id', 'inner');
 
         $form->add($formInner);
-        $this->assertEquals('<form id="outer"><form id="inner"></form></form>', $form->render());
+        $this->assertEquals('<form action="" method="post" id="outer"><form action="" method="post" id="inner"></form></form>', $form->render());
     }
 } 

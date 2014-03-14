@@ -11,6 +11,17 @@ use tomverran\Form\Container;
 class Form extends Container
 {
     /**
+     * Construct this form
+     * @param string $action
+     * @param string $method
+     * @param array $options
+     */
+    public function __construct($action = '', $method = 'post', $options = [])
+    {
+        parent::__construct(array_replace($options, ['action' => $action, 'method' => $method]));
+    }
+
+    /**
      * Render summat before the kids
      * @return string
      */

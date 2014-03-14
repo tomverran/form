@@ -40,6 +40,13 @@ abstract class Element
     private static $defaultCharset = 'utf-8';
 
     /**
+     * The default options for element subclasses,
+     * stored as class name => options
+     * @var array
+     */
+    private static $defaultOptions = [];
+
+    /**
      * A Zend_Escaper used to escape things
      * kept private to minimise the extent of the dependency
      * @var \Zend\Escaper\Escaper
@@ -52,10 +59,44 @@ abstract class Element
      */
     public function __construct($options = [])
     {
-        foreach ($options as $option => $value) {
+        foreach (array_replace($this->getDefaultOptions(), $options) as $option => $value) {
             $this->setAttribute($option, $value);
         }
         $this->escaper = new Escaper(self::$defaultCharset);
+    }
+
+    /**
+     * Get the default options for this class
+     * @return array
+     */
+    protected function getDefaultOptions()
+    {
+        $parents = [get_called_class()];
+        $class = reset($parents);
+
+        while ($parent = get_parent_class($class)) {
+            $parents[] = $parent;
+            $class = $parent;
+        }
+
+        $defaultOptions = [];
+        foreach(array_reverse($parents) as $parent) {
+            if (isset(self::$defaultOptions[$parent])) {
+                $defaultOptions = array_replace($defaultOptions, self::$defaultOptions[$parent]);
+            }
+        }
+        return $defaultOptions;
+    }
+
+    /**
+     * Set the default options for this class,
+     * these will then be replaced by default options set
+     * further down the class heirarchy, or on element construction
+     * @param array $options
+     */
+    public static function setDefaultOptions(array $options)
+    {
+        self::$defaultOptions[get_called_class()] = $options;
     }
 
     /**
