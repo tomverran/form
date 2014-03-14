@@ -39,6 +39,7 @@ abstract class Container extends Element
         foreach ($this->elements as $child) {
             $isValid = $isValid && $child->isValid($data);
         }
+        return $isValid;
     }
 
     /**
