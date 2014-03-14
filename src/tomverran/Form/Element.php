@@ -104,7 +104,7 @@ abstract class Element
         if (property_exists($this, $candidateProperty)) {
             return $this->$candidateProperty;
         }
-        return $this->attributes[$attribute];
+        return array_key_exists($attribute, $this->attributes) ? $this->attributes[$attribute] : null;
     }
 
     /**

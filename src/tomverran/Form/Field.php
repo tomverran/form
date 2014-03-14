@@ -20,6 +20,8 @@ abstract class Field extends Element
      */
     protected $attrValidators = [];
 
+    protected $attrLabel = '';
+
     /**
      * Construct this field
      * @param array $options - Options for the element
@@ -27,7 +29,11 @@ abstract class Field extends Element
      */
     public function __construct($options = [], $validators = [])
     {
-        parent::__construct( array_replace($options, ['validators' => $validators]));
+        //set the id to the name of the field if none is given
+        if (isset($options['name']) && !isset($options['id'])) {
+            $options['id'] = $options['name'];
+        }
+        parent::__construct(array_replace($options, ['validators' => $validators]));
     }
 
     /**
@@ -64,5 +70,17 @@ abstract class Field extends Element
         if ( isset( $data[$this->getAttribute('name')])) {
             $this->setAttribute('value', $data[$this->getAttribute('name')]);
         }
+    }
+
+    /**
+     * Render something before an element
+     * this is where label rendering happens
+     * @return string
+     */
+    public function renderBeforeElement()
+    {
+        $labelAttrs = ['for' => $this->getAttribute('id')];
+        $label = $this->attrLabel ? '<label' . $this->getEscapedAttributeString($labelAttrs) . '>' . $this->escape($this->attrLabel) . '</label>' : '';
+        return parent::renderBeforeElement() . $label;
     }
 } 

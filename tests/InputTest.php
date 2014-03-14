@@ -27,4 +27,10 @@ class InputTest extends PHPUnit_Framework_TestCase
 
         $this->assertContains('value="er"', $text->render());
     }
+
+    public function testLabel()
+    {
+        $text = new Text(['name' => 'field', 'label' => 'Printer']);
+        $this->assertContains('<label for="field">Printer</label>', $text->render());
+    }
 } 
