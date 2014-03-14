@@ -42,7 +42,7 @@ class FormTest extends PHPUnit_Framework_TestCase
         $formInner = new Form();
         $formInner->setAttribute('id', 'inner');
 
-        $form->addElement($formInner);
+        $form->add($formInner);
         $this->assertEquals('<form id="outer"><form id="inner"></form></form>', $form->render());
     }
 } 

@@ -58,10 +58,12 @@ abstract class Container extends Element
     /**
      * Add an element
      * @param Element $element
+     * @return $this|\tomverran\Form\Container
      */
-    public function addElement(Element $element)
+    public function add(Element $element)
     {
         $this->elements[] = $element;
+        return $element instanceof Container ? $element : $this;
     }
 
     /**
