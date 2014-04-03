@@ -51,7 +51,7 @@ class FormTest extends PHPUnit_Framework_TestCase
     public function testGetErrors()
     {
         $form = new Form();
-        $form->add(new Text(['name' => 'test elem'], [new Digits]));
+        $form->add(new Text(['name' => 'test elem'], new Digits));
 
         $this->assertFalse($form->isValid(['test elem' => 'nope']), 'form shouldnt validate');
         $this->assertNotEmpty($form->getErrors());

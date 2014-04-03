@@ -36,13 +36,17 @@ abstract class Field extends Element
     /**
      * Construct this field
      * @param array $options - Options for the element
-     * @param array $validators - Validators for the field
+     * @param array|\Zend\Validator\AbstractValidator $validators - Validators for the field
      */
     public function __construct($options = [], $validators = [])
     {
         //set the id to the name of the field if none is given
         if (isset($options['name']) && !isset($options['id'])) {
             $options['id'] = $options['name'];
+        }
+
+        if ($validators && !is_array($validators)) {
+            $validators = [$validators];
         }
 
         if (array_key_exists('validators', $options)) {
