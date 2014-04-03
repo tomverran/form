@@ -221,6 +221,12 @@ abstract class Element
     }
 
     /**
+     * Get any validation errors.
+     * @return array
+     */
+    public abstract function getErrors();
+
+    /**
      * Return a string representation of this form
      * this is an alias of render()
      * @return string

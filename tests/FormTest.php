@@ -1,5 +1,7 @@
 <?php
 use tomverran\Form\Container\Form;
+use tomverran\Form\Field\Text;
+use Zend\Validator\Digits;
 
 /**
  * FormTest.php
@@ -44,5 +46,14 @@ class FormTest extends PHPUnit_Framework_TestCase
 
         $form->add($formInner);
         $this->assertEquals('<form action="" method="post" id="outer"><form action="" method="post" id="inner"></form></form>', $form->render());
+    }
+
+    public function testGetErrors()
+    {
+        $form = new Form();
+        $form->add(new Text(['name' => 'test elem'], [new Digits]));
+
+        $this->assertFalse($form->isValid(['test elem' => 'nope']), 'form shouldnt validate');
+        $this->assertNotEmpty($form->getErrors());
     }
 } 

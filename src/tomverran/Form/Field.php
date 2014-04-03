@@ -20,7 +20,18 @@ abstract class Field extends Element
      */
     protected $attrValidators = [];
 
+    /**
+     * The label for this field
+     * @var string
+     */
     protected $attrLabel = '';
+
+    /**
+     * An array of errors, generated either from Zend\Validators
+     * or set manually or by some external force.
+     * @var array
+     */
+    private $attrErrors = [];
 
     /**
      * Construct this field
@@ -33,6 +44,14 @@ abstract class Field extends Element
         if (isset($options['name']) && !isset($options['id'])) {
             $options['id'] = $options['name'];
         }
+
+        if (array_key_exists('validators', $options)) {
+            if (!is_array($options['validators'])) {
+                $options['validators'] = [$options['validators']];
+            }
+            $validators = array_merge($validators, $options['validators']);
+        }
+
         parent::__construct(array_replace($options, ['validators' => $validators]));
     }
 
@@ -54,10 +73,26 @@ abstract class Field extends Element
     {
         foreach ($this->attrValidators as $validator) {
             if (!$validator->isValid($data[$this->getAttribute('name')])) {
+
+                $messages = $validator->getMessages();
+                foreach ( $messages as &$message ) {
+                    $message = $this->attrLabel ? $this->attrLabel . ':' . $message : $message;
+                }
+
+                $this->attrErrors = array_merge($this->attrErrors, $messages);
                 return false;
             }
         }
         return true;
+    }
+
+    /**
+     * Get errors ocurring during validation
+     * @return array
+     */
+    public function getErrors()
+    {
+        return $this->attrErrors;
     }
 
     /**

@@ -98,4 +98,17 @@ abstract class Container extends Element
         $buffer .= $this->renderAfterChildren() . $this->renderAfterElement();
         return $buffer;
     }
+
+    /**
+     * Get errors from our children
+     * @return array
+     */
+    public function getErrors()
+    {
+        $errors = [];
+        foreach ( $this->elements as $element) {
+            $errors = array_merge($errors, $element->getErrors());
+        }
+        return $errors;
+    }
 } 
